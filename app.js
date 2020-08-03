@@ -1,31 +1,35 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const express = require("express");
+var bodyParser = require("body-parser");
 const io = require("socket.io");
 const http = require("http");
 const app = express();
 
-const cors = require("cors");
-app.use(cors());
-
 require("./config/database");
+
+const cors = require("cors");
+
+app.use(bodyParser.json());
+
+app.use(express.static("public"));
 
 const server = http.createServer(app);
 
+app.use(cors({ origin: process.env.FRONTEND_URL }));
+
 const baseIO = io(server);
-baseIO.origins("*:*");
+baseIO.origins(process.env.FRONTEND_URL);
 
 const privateIO = baseIO.of("/private");
+const athorizacion = require('./middlewares/athorizacionSocket')
+privateIO.use(athorizacion);
 
-// const athorizacion = require("./middlewares/athorizacionSocket");
+module.exports = { io: baseIO, privateIO };
 
-// privateIO.use(athorizacion);
+require("./sockets");
+require("./routes")(app);
 
-// module.exports.io = baseIO;
-// module.exports.privateIO = privateIO;
-
-// require("./sockets");
-
-app.get("/", (r, s) => s.json({ winiie: "ok" }));
-
-server.listen(process.env.NODE_PORT, () => console.log(`Socket Server running on port ${process.env.NODE_PORT}`));
+server.listen(process.env.NODE_PORT, () =>
+  console.log(`Socket Server running on port ${process.env.NODE_PORT}`)
+);
