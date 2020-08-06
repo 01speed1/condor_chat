@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 function FriendsControl({
   userID,
@@ -7,7 +8,6 @@ function FriendsControl({
   setFriends,
   setSelectedFriend,
   setSelectedGroup,
-  setCreatingGroup,
   socket,
 }) {
 
@@ -21,7 +21,6 @@ function FriendsControl({
   const handleOnSelectFriend = (friendID) => (event) => {
     setSelectedFriend(friendID);
     setSelectedGroup(null)
-    setCreatingGroup(false);
   };
 
   return (
@@ -29,9 +28,9 @@ function FriendsControl({
       <h3>Friends</h3>
       <ul>
         {friends?.map(({ username, friendID }, index) => (
-          <li key={`friend${index}`} onClick={handleOnSelectFriend(friendID)}>
+          <Link to="/dashboard/chat" key={`friend${index}`} onClick={handleOnSelectFriend(friendID)}>
             {username}
-          </li>
+          </Link>
         ))}
       </ul>
     </div>
@@ -44,7 +43,6 @@ FriendsControl.propTypes = {
   setFriends: PropTypes.func,
   setSelectedFriend: PropTypes.func,
   setSelectedGroup: PropTypes.func,
-  setCreatingGroup: PropTypes.func,
   socket: PropTypes.object,
 };
 

@@ -12,9 +12,9 @@ import PublicRoute from "../../shared/Auth/PublicRoute";
 export default function App() {
   return (
     <Router>
-      <PublicRoute path="/signup" exact component={SignUp} />
-      <PrivateRoute path="/dashboard" exact component={Dashboard} />
-      <PublicRoute path="/*" exact component={Join} />
+      <PublicRoute path="/signup" component={SignUp} />
+      <PrivateRoute path="/dashboard" component={Dashboard} />
+      <PublicRoute path="/" exact component={Join} />
     </Router>
   );
 }

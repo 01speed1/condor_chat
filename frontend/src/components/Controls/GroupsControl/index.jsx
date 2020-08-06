@@ -2,12 +2,12 @@ import "./GroupsControl.scss";
 
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 function GroupsControl({
   socket,
   setSelectedGroup,
   setSelectedFriend,
-  setCreatingGroup,
   userID,
 }) {
   const [groups, setGroups] = useState([]);
@@ -20,11 +20,7 @@ function GroupsControl({
       });
   }, [socket, groups]);
 
-  const handleOnCreateGroup = () => {
-    setCreatingGroup(true);
-  };
-
-  const handleOnSelecrGroup = (groupID) => (event) => {
+  const handleOnSelecrGroup = (groupID) => () => {
     setSelectedGroup(groupID);
     setSelectedFriend(null);
   };
@@ -32,12 +28,15 @@ function GroupsControl({
   return (
     <div className="GroupsControl">
       <h3 className="GroupsControl__title">Groups</h3>
-      <button onClick={handleOnCreateGroup}>Create a Group</button>
+      <Link to="/dashboard/create_group">
+        <button >Create a Group</button>
+      </Link>
+
       <div className="GroupsControl__list">
         {groups?.map(({ groupName, groupID }) => (
-          <li key={groupID} onClick={handleOnSelecrGroup(groupID)}>
+          <Link to="/dashboard/chat" key={groupID} onClick={handleOnSelecrGroup(groupID)}>
             {groupName}
-          </li>
+          </Link>
         ))}
       </div>
     </div>
@@ -47,7 +46,6 @@ function GroupsControl({
 GroupsControl.propTypes = {
   socket: PropTypes.object,
   setSelectedGroup: PropTypes.func,
-  setCreatingGroup: PropTypes.func,
   userID: PropTypes.string,
 };
 

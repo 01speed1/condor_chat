@@ -8,7 +8,8 @@ const {
 module.exports = function (socket) {
   socket.on("loadGroups", (parameters, callback) => {
     loadGroups(parameters)
-      .then((groups) => callback({ valid: true, groups }))
+      .then((groups) => {
+        callback({ valid: true, groups })})
       .catch((errors) => callback({ errors }));
   });
 
