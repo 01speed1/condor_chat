@@ -1,18 +1,20 @@
 import React from "react";
 import "./App.scss";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import Join from "../Join";
-import Chat from "../Chat";
+import Dashboard from "../Dashboard";
 import SignUp from "../SignUp";
+import PrivateRoute from "../../shared/Auth/PrivateRoute";
+import PublicRoute from "../../shared/Auth/PublicRoute";
 
 export default function App() {
   return (
     <Router>
-      <Route path="/" exact component={Join} />
-      <Route path="/signup" exact component={SignUp} />
-      <Route path="/chat" exact component={Chat} />
+      <PublicRoute path="/signup" exact component={SignUp} />
+      <PrivateRoute path="/dashboard" exact component={Dashboard} />
+      <PublicRoute path="/*" exact component={Join} />
     </Router>
   );
 }

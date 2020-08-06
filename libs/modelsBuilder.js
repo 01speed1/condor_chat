@@ -1,12 +1,14 @@
 const getAll = Model => async () => await Model.find().exec();
-const findBy = Model => async (parameters) => await Model.find(parameters).exec();
+const findBy = Model => async (parameters) => {
+  try {return await Model.find(parameters).exec()} catch (errors) { return errors }
+};
 const getOne = Model => async findOptions =>
   await Model.findOne(findOptions).exec();
 
 const create = Model => async parameters => {
   const newInstace = new Model(parameters);
 
-  return newInstace.save();
+  return await newInstace.save();
 };
 
 module.exports = Model => ({

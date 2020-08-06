@@ -1,4 +1,5 @@
 const { required, tooShort, equality } = require("../../libs/errorsBuilder");
+const {isEmpty} = require('../../helpers/object.helpers')
 
 const validateCreateUser = (userParameters) => {
   const { username, password, passwordConfirmantion, createdAt, imagePath } = userParameters
@@ -15,7 +16,9 @@ const validateCreateUser = (userParameters) => {
 
   errors = required(errors, 'createdAt', createdAt)
 
-  return (JSON.stringify(errors) === JSON.stringify({})) ? { errors: null, parameters: userParameters } : { errors: errors, parameters: null }
+  if(isEmpty(errors)) return { errors: null, parameters: userParameters }
+
+  return { errors, parameters: null }
 }
 
 const validateFindUser = (userParameters) => {
@@ -29,7 +32,9 @@ const validateFindUser = (userParameters) => {
   errors = required(errors, 'password', password)
   errors = tooShort(errors, 'password', password, 6)
 
-  return (JSON.stringify(errors) === JSON.stringify({})) ? { errors: null, parameters: userParameters } : { errors: errors, parameters: null }
+  if(isEmpty(errors)) return { errors: null, parameters: userParameters }
+
+  return { errors, parameters: null }
 }
 
 module.exports = { validateCreateUser, validateFindUser }

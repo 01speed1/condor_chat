@@ -1,6 +1,6 @@
+const Friend = require("./friend.model");
 const modelBuilder = require("../../libs/modelsBuilder");
 
-const Friend = require("./friend.model");
 const { create, getOne, findBy, getAll } = modelBuilder(Friend);
 
 const User = require("../users/user.model");
@@ -8,16 +8,29 @@ const { getOne: getOneUser } = modelBuilder(User);
 
 const { findUserByUsername } = require("../users/user.service");
 
-const toListFriends = async (currentUserID) => {
-  const frindsList = await findBy({ user: currentUserID });
+const { validateloadFriends } = require("./friend.validations");
 
-  const friendsData = frindsList.map(
-    async (friendship) => await getOneUser({ _id: friendship.friend })
+const loadFriendList = async (friendParameters) => {
+  const { errors, parameters } = validateloadFriends(friendParameters);
+
+  if (errors) Promise.reject(errors);
+
+  const { userID } = parameters;
+
+  const frindsList = await findBy({ user: userID });
+
+  const friendsPromises = frindsList.map(({ friend }) =>
+    getOneUser({ _id: friend })
   );
 
-  return await (await Promise.all(friendsData)).map(
-    (friend) => friend.username
-  );
+  const friendsResolved = await Promise.all(friendsPromises);
+
+  const friends = friendsResolved.map(({ username, _id: friendID }) => ({
+    username,
+    friendID,
+  }));
+
+  return friends
 };
 
 const addFriend = async ({ currentUserID, newFriend }) => {
@@ -45,4 +58,4 @@ const isMyFriend = async ({ currentUserID, friendID }) => {
   return Boolean(myFriend);
 };
 
-module.exports = { addFriend, toListFriends };
+module.exports = { addFriend, loadFriendList };

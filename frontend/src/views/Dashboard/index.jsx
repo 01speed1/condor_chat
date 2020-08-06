@@ -1,95 +1,80 @@
 import "./Dashboard.scss";
 
 import React, { useState, useEffect } from "react";
-import queryString from "query-string";
-import io from "socket.io-client";
-import jwtDecoder from "jwt-decode";
 
+import io from "socket.io-client";
 import PropTypes from "prop-types";
 
 import { BACKEND_URL_SOCKET_PRIVATE } from "../../constants";
-import InfoBar from "../../components/InfoBar";
-import MessageBox from "../../components/MessageBox";
-import MessagesBox from "../../components/MessagesBox";
+
+import { decodeUserToken } from "../../helpers/token.helper";
+
 import ChatPanel from "../../components/Panels/ChatPanel";
+import GroupsControl from "../../components/Controls/GroupsControl";
+import FriendsControl from "../../components/Controls/FriendsControl";
+import GroupCreaterPanel from "../../components/Panels/GroupCreaterPanel";
+import SearchControl from "../../components/Controls/SearchControl";
 
-let socket;
+export default function Dashboard() {
+  const [socket, setSocket] = useState(null);
 
-const tales = 'hola mundo';
-
-export default function Dashboard({ location }) {
   const [token] = useState(localStorage.getItem("token"));
 
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
-  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
+  const [currentUserData, setCurrentUserData] = useState({});
 
-  // current state
   const [newFriend, setNewFriend] = useState("");
+
   const [friends, setFriends] = useState([]);
 
-  const [newFriend, setNewFriend] = useState("");
+  const [selectedFriendID, setSelectedFriendID] = useState("");
+  const [selectedGroupID, setSelectedGroupID] = useState("");
 
-  // main connection
+  const [isCreatingGroup, setCreatingGroup] = useState(false);
+
   useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
-
-    setName(name);
-    setRoom(room);
-
-    socket = io.connect(BACKEND_URL_SOCKET_PRIVATE, {
+    const initialSocket = io(BACKEND_URL_SOCKET_PRIVATE, {
       query: `token=${token}`,
     });
 
-    socket.emit("join", { name, room }, () => {});
+    setSocket(initialSocket);
+
+    const userData = decodeUserToken(token);
+
+    setCurrentUserData(userData);
+
+    initialSocket &&
+      initialSocket.emit("connectUser", { userID: userData._id }, (values) => {
+        console.log("connectUser", values);
+      });
+
+    initialSocket.on("notifyPrivateMessage", () => alert("new message"));
 
     return () => {
-      socket.emit("disconnect");
-      socket.off();
+      initialSocket.emit("disconnect", { userID: userData._id });
+      initialSocket.off();
+      localStorage.removeItem("token");
     };
-  }, [BACKEND_URL_SOCKET_PRIVATE, location.search]);
+  }, [BACKEND_URL_SOCKET_PRIVATE, token]);
 
-  // efect meesage
   useEffect(() => {
-    socket.on("message", (message) => {
-      setMessages([...messages, message]);
-    });
+    socket &&
+      socket.on("message", (message) => {
+        setMessages([...messages, message]);
+      });
   }, [messages]);
-
-  // efect friends list
-  useEffect(() => {
-    const { _id } = jwtDecoder(token);
-
-    socket.on("friendsList", (friendsListUpdated) => {
-      setFriends(friendsListUpdated);
-    });
-  }, [friends]);
-
-  const sendMessage = (event) => {
-    event.preventDefault();
-    if (message) {
-      socket.emit("sendMessage", message, () => setMessage(""));
-    }
-  };
-
-  const messageBoxProp = {
-    message,
-    setMessage,
-    sendMessage,
-  };
 
   const handleOnSearchFriend = (event) => {
     event.preventDefault();
-    const { _id } = jwtDecoder(token);
+    const { _id: currentUserID } = decodeUserToken(token);
 
     socket.emit(
       "addFriend",
-      { currentUserID: _id, newFriend },
-      ({ error, message }) => {
+      { currentUserID, newFriend },
+      ({ error }) => {
+        error && console.log("addFriend errors", error);
         setNewFriend("");
-        error && alert(error);
       }
     );
   };
@@ -102,11 +87,15 @@ export default function Dashboard({ location }) {
     <div className="Dashboard">
       <div className="Dashboard__sideBar">
         <h1>Dashboard</h1>
+        {currentUserData?.username && (<h2>{`Hello ${currentUserData?.username}!`}</h2>)}
 
         {/* Move to in component */}
         <div className="SideBar">
-          <div className="SideBar__addFriendContainer">
+          <div className="SideBar__searchContainer">
+            <SearchControl socket={socket} userID={currentUserData._id} />
+          </div>
 
+          <div className="SideBar__addFriendContainer">
             {/* Move to in component */}
             <h2>Add a friend</h2>
             <input
@@ -119,30 +108,45 @@ export default function Dashboard({ location }) {
               Add friend
             </button>
           </div>
-
           <div className="SideBar__friendsList">
+            <FriendsControl
+              userID={currentUserData._id}
+              socket={socket}
+              friends={friends}
+              setFriends={setFriends}
+              setSelectedFriend={setSelectedFriendID}
+              setSelectedGroup={setSelectedGroupID}
+              setCreatingGroup={setCreatingGroup}
+            />
+          </div>
 
-            {/* Move to in component */}
-            <h2>Friends list</h2>
-            <ul>
-              {friends.map((friend, index) => (
-                <li key={index}>{friend}</li>
-              ))}
-            </ul>
+          <div className="SideBar__groupsList">
+            <GroupsControl
+              socket={socket}
+              setSelectedGroup={setSelectedGroupID}
+              setSelectedFriend={setSelectedFriendID}
+              setCreatingGroup={setCreatingGroup}
+              userID={currentUserData._id}
+            />
           </div>
         </div>
       </div>
-      <div className="Dashboard_chatPanel">
-        <ChatPanel socket={socket} selectFriend={} />
+      <div className="Dashboard__chatPanel">
+        {isCreatingGroup ? (
+          <GroupCreaterPanel
+            userID={currentUserData._id}
+            socket={socket}
+            friends={friends}
+            setCreatingGroup={setCreatingGroup}
+          />
+        ) : (
+          <ChatPanel
+            socket={socket}
+            selectedGroup={selectedGroupID}
+            selectedFriend={selectedFriendID}
+          />
+        )}
       </div>
-
-      {/* <InfoBar room={room} />
-      <MessagesBox messages={messages} name={name} />
-      <MessageBox {...messageBoxProp} /> */}
     </div>
   );
 }
-
-Dashboard.propTypes = {
-  location: PropTypes.object,
-};

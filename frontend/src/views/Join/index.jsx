@@ -1,5 +1,6 @@
-import React, { useState } from "react";
 import "./Join.scss";
+
+import React, { useState, useEffect } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -12,10 +13,7 @@ export default function Join() {
 
   const [errors, setErrors] = useState({});
 
-
   const handleOnLogin = (event) => {
-    event.preventDefault();
-
     const UserParameters = {
       username,
       password,
@@ -24,11 +22,10 @@ export default function Join() {
     requestHelper(`${BACKEND_URL_API}/login`, UserParameters)
       .then(({ valid, token, errors }) => {
         localStorage.setItem("token", token);
-        valid && window.location.assign("/chat");
-
         setErrors(errors);
       })
       .catch((err) => {
+        event.preventDefault();
         setErrors({ ...errors, general: err });
       });
   };
@@ -36,7 +33,7 @@ export default function Join() {
   return (
     <div>
       <h1>Join</h1>
-      <form onSubmit={handleOnLogin}>
+      <form>
         <div>
           <input
             type="text"
@@ -55,7 +52,9 @@ export default function Join() {
           />
           <span>{errors?.password && Object.values(errors?.password)}</span>
         </div>
-        <button type="submit">Join</button>
+        <Link to="/dashboard" onClick={handleOnLogin}>
+          <button type="button">Join</button>
+        </Link>
       </form>
       <Link to="/signup">
         <button type="button">I dont have a accout</button>

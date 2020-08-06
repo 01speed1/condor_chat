@@ -1,3 +1,13 @@
+const empty = (errors, fieldKey, value) => {
+  if(!Array.isArray(value) && value.length <= 0) {
+    const foundError = {}
+    foundError[fieldKey] = { ...errors[fieldKey], required: `${fieldKey} is empty` }
+
+    return { ...errors, ...foundError }
+  }
+  return errors
+}
+
 const required = (errors, fieldKey, value ) => {
   if(!value) {
     const foundError = {}
@@ -28,4 +38,4 @@ const equality = (errors, fieldKey, value, validation ) => {
   return errors
 }
 
-module.exports = { required, tooShort, equality }
+module.exports = { required, tooShort, equality, empty }
