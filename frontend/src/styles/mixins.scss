@@ -1,0 +1,45 @@
+@mixin neumorphic {
+  border-radius: 50px;
+  background: linear-gradient(
+    145deg,
+    $color_neumorphic_primary,
+    $color_neumorphic_secondary
+  );
+}
+
+@mixin neumorphicShadow {
+  box-shadow: 20px 20px 60px $color_neumorphic_shadow_primary,
+    -20px -20px 60px $color_neumorphic_shadow_secondary;
+}
+
+@mixin neumorphicPushed {
+  border-radius: 50px;
+  background: linear-gradient(
+    145deg,
+    $color_neumorphic_primary_pushed,
+    $color_neumorphic_secondary_pushed
+  );
+}
+
+@mixin neumorphicButttonPrimary {
+  border-radius: 50px;
+  background: #202328;
+  box-shadow: 14px 14px 28px #1b1e22, -14px -14px 28px #25282e;
+}
+
+@mixin neumorphicButttonSecondary {
+  border-radius: 50px;
+  background: linear-gradient(
+    145deg,
+    #d84444,
+    #9d3233
+  );
+  box-shadow: 3px 1px #1b1e22, -8px -5px 14px #25282e;
+}
+
+@mixin flexCentered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

@@ -2,7 +2,7 @@ import "./Join.scss";
 
 import React, { useState, useEffect } from "react";
 
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 
 import { BACKEND_URL_API } from "../../constants";
 import requestHelper from "../../helpers/request.helper";
@@ -21,20 +21,22 @@ export default function Join() {
 
     requestHelper(`${BACKEND_URL_API}/login`, UserParameters)
       .then(({ valid, token, errors }) => {
+        event.preventDefault();
         localStorage.setItem("token", token);
         setErrors(errors);
+        valid && window.location.assign("/dashboard");
       })
       .catch((err) => {
-        event.preventDefault();
         setErrors({ ...errors, general: err });
       });
   };
 
   return (
-    <div>
-      <h1>Join</h1>
-      <form>
-        <div>
+    <div className="Join">
+      <div className="Join__container">
+        <h1 className="Join__title">Welcome to CondorChat!</h1>
+
+        <div className="formField">
           <input
             type="text"
             placeholder="Username"
@@ -43,7 +45,7 @@ export default function Join() {
           />
           <span>{errors?.username && Object.values(errors?.username)}</span>
         </div>
-        <div>
+        <div className="formField">
           <input
             type="password"
             placeholder="Password"
@@ -52,13 +54,17 @@ export default function Join() {
           />
           <span>{errors?.password && Object.values(errors?.password)}</span>
         </div>
-        <Link to="/dashboard" onClick={handleOnLogin}>
-          <button type="button">Join</button>
-        </Link>
-      </form>
-      <Link to="/signup">
-        <button type="button">I dont have a accout</button>
-      </Link>
+
+        <div className="Join__buttons">
+          <button className="--big" onClick={handleOnLogin} type="button">
+            Join
+            <i className="material-icons"></i>
+          </button>
+          <Link to="/signup">
+            <button type="button">I dont have a accout</button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

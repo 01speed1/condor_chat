@@ -11,8 +11,8 @@ function SearchControl({ socket, userID, setShowingResults }) {
     setConversationQuery(value);
 
   const handleOnSearch = () => {
-    socket && socket.emit("searchConversation", { query: conversationQuery, userID } );
-    setShowingResults(true)
+    socket &&
+      socket.emit("searchConversation", { query: conversationQuery, userID });
   };
 
   return (

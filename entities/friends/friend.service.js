@@ -45,12 +45,12 @@ const addFriend = async ({ currentUserID, newFriend }) => {
 
   if (isNowMyFried) return { error: `${newFriend} is actually your friend` };
 
-  const friendship = await create({
+  const {friend} = await create({
     user: currentUserID,
     friend: foundFriend._id,
   });
 
-  return { friendship, message: `${newFriend} and you are friends now` };
+  return { friendID: friend, message: `${newFriend} and you are friends now` };
 };
 
 const isMyFriend = async ({ currentUserID, friendID }) => {

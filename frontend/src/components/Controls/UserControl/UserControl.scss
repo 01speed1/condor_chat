@@ -1,0 +1,37 @@
+@import '../../../styles/index.scss';
+
+.UserControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+
+  &__closeButton {
+    color: white;
+    @include neumorphicButttonSecondary();
+    padding: 0.8rem;
+
+    & > .material-icons{
+      font-size: 2rem;
+    }
+  }
+
+  &__username {
+    font-size: 3rem;
+  }
+
+  &__avatar {
+
+    @include neumorphicShadow();
+
+    height: 5rem;
+    width: 5rem;
+
+    border-radius: 50px;
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+}

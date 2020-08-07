@@ -25,7 +25,7 @@ module.exports = function (socket) {
     addMessageToGroup(parameters)
       .then((messages) => {
         callback({ valid: true, messages });
-        // send notification
+        // send notification to all users
 
       })
       .catch((errors) => callback({ errors }));

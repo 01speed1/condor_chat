@@ -21,7 +21,17 @@ const defaualtAPIConfig = (config) => {
 export default async (url, body, config = {}) => {
   const res = await fetch(
     url,
-    defaualtAPIConfig({ ...config, body: JSON.stringify(body) })
+    defaualtAPIConfig({ ...config, body:  JSON.stringify(body) })
   );
   return await res.json();
 };
+
+export async function uploadImage( url, body ){
+
+  const response = await fetch(url, {
+    method: "POST",
+    body
+  })
+
+  return await response.json()
+}

@@ -4,6 +4,7 @@ const ApiRouter = express.Router()
 
 const registrationRouter = require('../entities/authentication/registration/registration.routes')
 const sessionRouter = require('../entities/authentication/session/session.routes')
+const imageUploaderRouter = require('../entities/imageUploader/imageUploader.routes')
 const userRouter = require('../entities/users/user.routes.js')
 
 ApiRouter.get('/', (request, response) => {
@@ -14,6 +15,7 @@ module.exports = (app) => {
   app.use('/api/users', userRouter)
   app.use('/api/signup', registrationRouter)
   app.use('/api/login', sessionRouter)
+  app.use('/api/image_uploader', imageUploaderRouter)
   app.use('/api', ApiRouter)
 
   // app.get('/', (request, response) => {

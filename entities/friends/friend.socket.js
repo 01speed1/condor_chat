@@ -18,6 +18,6 @@ module.exports = function (socket) {
       .then((data) => {
         socket.emit("loadFriendList", data);
       })
-      .catch((error) => callback({ error }));
+      .catch((errors) => callback({ errors }));
   });
 };
