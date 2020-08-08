@@ -6,7 +6,7 @@ import { BACKEND_URL_SOCKET_PRIVATE } from "../../constants";
 
 import { decodeUserToken } from "../../helpers/token.helper";
 
-import { Route, Link } from "react-router-dom";
+import { Route } from "react-router-dom";
 
 import ChatPanel from "../../components/Panels/ChatPanel";
 import GroupsControl from "../../components/Controls/GroupsControl";

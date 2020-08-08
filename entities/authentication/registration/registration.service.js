@@ -10,7 +10,7 @@ const registerUser = async (userParameters) => {
     expireIn: 60 * 60 * 24
   }
 
-  return jwt.sign(payload, process.env.SECRET);
+  return jwt.sign(payload, 'temporal sescret');
 }
 
 module.exports = { registerUser }

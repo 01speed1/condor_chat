@@ -60,7 +60,7 @@ export default function SignUp() {
         <InputText
           type="password"
           placeholder="Confirm your password"
-          value={password}
+          value={passwordConfirmantion}
           handleOnChange={setPasswordConfirmantion}
           errors={errors?.passwordConfirmantion}
         />

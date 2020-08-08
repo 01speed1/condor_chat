@@ -16,10 +16,10 @@ app.use(express.static("public"));
 
 const server = http.createServer(app);
 
-app.use(cors({ origin: process.env.FRONTEND_URL }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 const baseIO = io(server);
-baseIO.origins(process.env.FRONTEND_URL);
+baseIO.origins('http://localhost:3000');
 
 const privateIO = baseIO.of("/private");
 const athorizacion = require('./middlewares/athorizacionSocket')
