@@ -4,14 +4,15 @@ const defaualtAPIConfig = (config) => {
   return Object.assign(
     {
       method: "POST",
-      mode: "cors",
-      cache: "no-cache",
+      //mode: "cors",
+      //cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": BACKEND_URL
+        "Access-Control-Allow-Origin": BACKEND_URL,
+        "Access-Control-Allow-Methods": 'POST'
       },
-      redirect: "follow",
-      referrerPolicy: "same-origin",
+      //redirect: "follow",
+      //referrerPolicy: "same-origin",
       body: JSON.stringify({}),
     },
     config
@@ -21,7 +22,7 @@ const defaualtAPIConfig = (config) => {
 export default async (url, body, config = {}) => {
   const res = await fetch(
     url,
-    defaualtAPIConfig({ ...config, body:  JSON.stringify(body) })
+    defaualtAPIConfig({ ...config, body: JSON.stringify(body) })
   );
   return await res.json();
 };
