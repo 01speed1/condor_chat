@@ -26,7 +26,7 @@ export default function SignUp() {
     requestHelper(`${BACKEND_URL_API}/signup`, UserParameters)
       .then(({ valid, errors }) => {
         valid && window.location.assign("/");
-        setErrors(errors);
+        console.log(errors);
       })
       .catch((err) => {
         setErrors({ ...errors, general: err });

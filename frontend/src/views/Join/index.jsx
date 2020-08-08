@@ -63,7 +63,7 @@ export default function Join() {
       </div>
 
       <div className="credentials">
-        <a href="">
+        <a href="https://github.com/01speed1/condor_chat">
           <span>Created by</span>
           <p>Ocar Guzman - 01speed1</p>
           <p>{"A Condor lab test, I will take luck ;)"}</p>
