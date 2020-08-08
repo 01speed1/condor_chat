@@ -12,7 +12,7 @@ export default function FriendItem({ username, socket, image, friendID }) {
 
   useEffect(() => {
     socket &&
-      socket.on("notifyPrivateMessage", ({ valid, message, meesageUserID }) => {
+      socket.on("notifyPrivateMessage", ({  message, meesageUserID }) => {
         if (meesageUserID === friendID) {
           setLastMessage(message);
         }
