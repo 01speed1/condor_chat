@@ -21,7 +21,8 @@ module.exports = function (socket, io) {
         return isConnectedUser({userID: friendID})
       })
       .then(({ socketID }) => {
-        io.to(socketID).emit("notifyPrivateMessage", { valid: true });
+        const { message, userID } = params
+        io.to(socketID).emit("notifyPrivateMessage", { valid: true, message, meesageUserID: userID });
       })
       .catch((error) => callback({ error }));
   });

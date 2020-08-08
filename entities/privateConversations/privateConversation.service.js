@@ -43,13 +43,17 @@ const loadPrivateConversation = async (privateConversationParameters) => {
 
   const { username } = await findFriendBy({_id: friendID })
 
-  const messages = [...messagesOrigin, ...messagesDestination].map(
+  const unsortMessages = [...messagesOrigin, ...messagesDestination].map(
     ({ userFrom, userTo, message, createdAt }) => ({
       userFrom,
       userTo,
       message,
       createdAt,
     })
+  );
+
+  const messages = unsortMessages.sort(
+    (messageOne, messageTwo) => messageOne.createdAt - messageTwo.createdAt
   );
 
   return { messages, username };

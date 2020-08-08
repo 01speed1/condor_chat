@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import FriendItem from './FriendItem'
 
 function FriendsControl({
   userID,
@@ -10,27 +11,30 @@ function FriendsControl({
   setSelectedGroup,
   socket,
 }) {
-
   useEffect(() => {
     socket &&
-      socket.emit("loadFriendList", { userID }, ({ errors, friends: friendsList }) => {
-        setFriends(friendsList);
-      });
+      socket.emit(
+        "loadFriendList",
+        { userID },
+        ({ errors, friends: friendsList }) => {
+          setFriends(friendsList.reverse());
+        }
+      );
   }, [socket, friends]);
 
-  const handleOnSelectFriend = (friendID) => (event) => {
-    setSelectedFriend(friendID);
+  const handleSetSeledtedFriend = (friendID) => (event) => {
+    setSelectedFriend(friendID)
     setSelectedGroup(null)
-  };
+  }
 
   return (
     <div className="FriendsControl">
-      <h3>Friends</h3>
-      <ul>
-        {friends?.map(({ username, friendID }, index) => (
-          <Link to="/dashboard/chat" key={`friend${index}`} onClick={handleOnSelectFriend(friendID)}>
-            {username}
-          </Link>
+      <h2>FRIENDS</h2>
+      <ul className="friendsList">
+        {friends?.map(({ username, friendID, imagePath }, index) => (
+          <div onClick={handleSetSeledtedFriend(friendID)}>
+            <FriendItem key={`friend${index}`} username={username} friendID={friendID} socket={socket} image={imagePath} />
+          </div>
         ))}
       </ul>
     </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { decodeUserToken } from "../../../helpers/token.helper";
 
-import {whenPressEnter} from '../../../helpers/events.helper'
+import { whenPressEnter } from "../../../helpers/events.helper";
 
 function ChatPanel({ socket, selectedGroup, selectedFriend }) {
   const [groupName, setGroupName] = useState("");
@@ -13,23 +13,27 @@ function ChatPanel({ socket, selectedGroup, selectedFriend }) {
 
   useEffect(() => {
     if (selectedFriend) {
-      socket && socket.emit(
-        "loadPrivateConversation",
-        { userID, friendID: selectedFriend },
-        ({ messages, username }) => {
-          setMessages(messages)
-          setGroupName(username)
-        });
+      socket &&
+        socket.emit(
+          "loadPrivateConversation",
+          { userID, friendID: selectedFriend },
+          ({ messages, username }) => {
+            setMessages(messages.reverse());
+            setGroupName(username);
+          }
+        );
     }
 
     if (selectedGroup) {
-      socket && socket.emit(
-        "loadGroupConversation",
-        { userID, groupID: selectedGroup },
-        ({ messages, groupName }) => {
-          setGroupName(groupName)
-          setMessages(messages)
-        });
+      socket &&
+        socket.emit(
+          "loadGroupConversation",
+          { userID, groupID: selectedGroup },
+          ({ messages, groupName }) => {
+            setGroupName(groupName);
+            setMessages(messages.reverse());
+          }
+        );
     }
 
     return () => {};
@@ -38,53 +42,72 @@ function ChatPanel({ socket, selectedGroup, selectedFriend }) {
   const handleOnSendMessage = (event) => {
     event.preventDefault();
 
-    selectedFriend && socket && message && socket.emit(
-      "sendPrivateMessage",
-      { userID, friendID: selectedFriend, message, createdAt: Date.now() },
-      ({ errors }) => {
-        (errors) && console.log('sendPrivateMessage errors', errors);
-        setMessage("");
-      }
-    );
+    selectedFriend &&
+      socket &&
+      message &&
+      socket.emit(
+        "sendPrivateMessage",
+        { userID, friendID: selectedFriend, message, createdAt: Date.now() },
+        ({ errors }) => setMessage("")
+      );
 
-    selectedGroup && socket && message && socket.emit(
-      "sendGroupMessage",
-      { userID, groupID: selectedGroup, message, createdAt: Date.now() },
-      ({ errors }) => {
-        (errors) && console.log('sendGroupMessage errors', errors);
-        setMessage("");
-      }
-    );
-
+    selectedGroup &&
+      socket &&
+      message &&
+      socket.emit(
+        "sendGroupMessage",
+        { userID, groupID: selectedGroup, message, createdAt: Date.now() },
+        ({ errors }) => setMessage("")
+      );
   };
 
-  const isSelectedConversation = () => {
-    if (selectedFriend || selectedGroup) return true
-    return false
-  }
+  const chooseSelectedConversation = () => {
+    if (selectedFriend || selectedGroup) return true;
+    return false;
+  };
 
   return (
     <div className="ChatPanel">
-      <h2> { groupName }</h2>
-      <div className="ChatPanel__messagesList">
-        {messages &&
-          messages.map(({ message }, index) => (
-            <p key={`message${index}`}>{message}</p>
+      <div className="ChatPanel__username">
+        <h2>{groupName}</h2>
+      </div>
+      <div className="contain" >
+        <div className="ChatPanel__messagesList">
+          {messages?.map(({ message, userFrom, createdAt }, index) => (
+            <div>
+              <p
+                key={`message${index}`}
+                className={`MessageItem ${userID !== userFrom && "--me"}`}
+              >
+                {message}
+                <br/>
+                <span style={{fontSize:'1rem'}} >{new Date(createdAt).toString()}</span>
+              </p>
+            </div>
           ))}
+        </div>
       </div>
 
-        {isSelectedConversation() && (<div className="ChatPanel__messageInput">
-          <input
-            type="text"
-            value={message}
-            onKeyUp={ whenPressEnter(handleOnSendMessage) }
-            onChange={({ target: { value } }) => setMessage(value)}
-          />
-          <button type="button" onClick={handleOnSendMessage}>
-            Send
-          </button>
-        </div>)}
-
+      {chooseSelectedConversation() && (
+        <div className="ChatPanel__messageInput formField">
+          <div className="messageInput">
+            <input
+              type="text"
+              value={message}
+              placeholder="Type your message"
+              onKeyUp={whenPressEnter(handleOnSendMessage)}
+              onChange={({ target: { value } }) => setMessage(value)}
+            />
+            <button
+              className="messageInput__sendButton"
+              type="button"
+              onClick={handleOnSendMessage}
+            >
+              <i className="material-icons">send</i>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

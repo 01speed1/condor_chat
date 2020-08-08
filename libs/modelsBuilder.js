@@ -2,8 +2,9 @@ const getAll = Model => async () => await Model.find().exec();
 const findBy = Model => async (parameters) => {
   try {return await Model.find(parameters).exec()} catch (errors) { return errors }
 };
-const getOne = Model => async findOptions =>
-  await Model.findOne(findOptions).exec();
+const getOne = Model => async findOptions =>{
+  try {return await Model.findOne(findOptions).exec()} catch (errors) { return errors }
+}
 
 const create = Model => async parameters => {
   const newInstace = new Model(parameters);

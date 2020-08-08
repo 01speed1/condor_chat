@@ -3,15 +3,14 @@ import PropTypes from "prop-types";
 
 function MessagesListResult({ label, messages }) {
   return (
-    <div>
-      {messages?.length > 0 && (
-        <div>
-          <h3>{label}</h3>
-          {messages?.map(({message}, index) => (
-            <p key={`mp${index}`}>{message}</p>
-          ))}
+    <div className="MessagesListResult">
+      <h3>{label}</h3>
+      {messages?.map(({ message, username }, index) => (
+        <div className="listResult" key={`mp${index}`}>
+          <span>{username}</span>
+          <p>{message}</p>
         </div>
-      )}
+      ))}
     </div>
   );
 }

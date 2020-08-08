@@ -1,2 +1,77 @@
 .ChatPanel {
+  @include neumorphic();
+  @include neumorphicShadow();
+
+  height: 100%;
+  width: 100%;
+
+  &__username {
+    display: flex;
+    align-items: center;
+    height: 10%;
+
+    h2 {
+      margin-left: 6rem;
+      margin-top: 1rem;
+      font-size: 6rem;
+
+      margin-bottom: 1rem;
+    }
+  }
+
+  .contain{
+    overflow: hidden;
+    height: 75%;
+  }
+
+  &__messagesList {
+    overflow: auto;
+    height: 100%;
+    transform: rotate(180deg);
+    direction: ltr;
+    margin-left: -2rem;
+  }
+
+  &__messageInput {
+    height: 20%;
+    margin: 0;
+
+    .messageInput {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      input {
+        width: 90%;
+      }
+
+      &__sendButton {
+        @include roundedButton();
+        margin: 0;
+      }
+    }
+  }
+}
+
+.MessageItem {
+  font-size: 2.5rem;
+  padding: 2rem;
+  transform: rotate(180deg);
+  direction: ltr;
+
+  margin-left: 3rem;
+  margin-bottom: 3rem;
+
+  @include neumorphic();
+  box-shadow: 5px 5px 11px #1b1e22, -15px -13px 17px #25282e;
+  background: #ee4f51;
+  width: 50%;
+
+  &.--me {
+    right: 0;
+    background: #202228;
+    margin-left: 42%;
+  }
+
 }

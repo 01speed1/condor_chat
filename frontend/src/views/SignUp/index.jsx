@@ -4,6 +4,7 @@ import { BACKEND_URL_API } from "../../constants";
 
 import requestHelper from "../../helpers/request.helper";
 import { Link } from "react-router-dom";
+import InputText from "../../components/Base/InputText";
 
 export default function SignUp() {
   const [username, setUsername] = useState("");
@@ -24,7 +25,6 @@ export default function SignUp() {
 
     requestHelper(`${BACKEND_URL_API}/signup`, UserParameters)
       .then(({ valid, errors }) => {
-        console.log(errors)
         valid && window.location.assign("/");
         setErrors(errors);
       })
@@ -34,50 +34,45 @@ export default function SignUp() {
   };
 
   return (
-    <div>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleOnSigUp}>
-        <pre>{errors?.general && JSON.stringify(errors?.general, null, 2)}</pre>
-        <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={({ target: { value } }) => setUsername(value)}
-          />
-          <span>{errors?.username && Object.values(errors?.username)}</span>
-        </div>
+    <div className="Join">
+      <div className="Join__container --signup">
+        <h1 className="Join__title">Hey Sign Up to chat!</h1>
+        <span>
+          {errors?.general && JSON.stringify(errors?.general, null, 2)}
+        </span>
 
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={({ target: { value } }) => setPassword(value)}
-          />
-          <span>{errors?.password && Object.values(errors?.password)}</span>
-        </div>
+        <InputText
+          type="text"
+          placeholder="Type your username"
+          value={username}
+          handleOnChange={setUsername}
+          errors={errors?.username}
+        />
 
-        <div>
-          <input
-            type="password"
-            placeholder="Confirm your password"
-            value={passwordConfirmantion}
-            onChange={({ target: { value } }) =>
-              setPasswordConfirmantion(value)
-            }
-          />
-          <span>
-            {errors?.passwordConfirmantion &&
-              Object.values(errors?.passwordConfirmantion)}
-          </span>
-        </div>
+        <InputText
+          type="password"
+          placeholder="Type your password"
+          value={password}
+          handleOnChange={setPassword}
+          errors={errors?.password}
+        />
 
-        <button type="submit">SignUp</button>
-      </form>
-      <Link to="/">
-        <button type="button">I have a Account</button>
-      </Link>
+        <InputText
+          type="password"
+          placeholder="Confirm your password"
+          value={password}
+          handleOnChange={setPasswordConfirmantion}
+          errors={errors?.passwordConfirmantion}
+        />
+        <div className="Join__buttons">
+          <button className="--big" type="submit" onClick={handleOnSigUp}>
+            SignUp
+          </button>
+          <Link to="/">
+            <button type="button">I have a Account</button>
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

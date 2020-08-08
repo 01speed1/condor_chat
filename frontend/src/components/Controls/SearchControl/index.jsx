@@ -1,31 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { whenPressEnter } from "../../../helpers/events.helper";
 import { Link } from "react-router-dom";
+import InputText from "../../Base/InputText";
 
-function SearchControl({ socket, userID, setShowingResults }) {
+function SearchControl({ socket, userID }) {
   const [conversationQuery, setConversationQuery] = useState("");
   const [results, setResults] = useState([]);
 
-  const handleOnChangeQuery = ({ target: { value } }) =>
-    setConversationQuery(value);
-
   const handleOnSearch = () => {
-    socket &&
-      socket.emit("searchConversation", { query: conversationQuery, userID });
+    socket && socket.emit("searchConversation", { query: conversationQuery, userID });
   };
 
   return (
-    <div>
-      <input
-        type="search"
+    <div className="SearchControl">
+      <InputText
         placeholder="Search Conversation"
+        type="search"
         value={conversationQuery}
-        onKeyUp={whenPressEnter(handleOnSearch)}
-        onChange={handleOnChangeQuery}
+        handleOnChange={setConversationQuery}
       />
+
       <Link to="/dashboard/result">
-        <button type="button"> Search </button>
+        <button onClick={handleOnSearch} className="SearchControl__searchButton" type="button">
+          <i className="material-icons">find_in_page</i>
+        </button>
       </Link>
     </div>
   );

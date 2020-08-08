@@ -5,17 +5,21 @@ const {
   loadGroupConversation,
 } = require("./groupConversation.service");
 
-module.exports = function (socket) {
+module.exports = function (socket, io) {
   socket.on("loadGroups", (parameters, callback) => {
     loadGroups(parameters)
       .then((groups) => {
-        callback({ valid: true, groups })})
+        callback({ valid: true, groups });
+      })
       .catch((errors) => callback({ errors }));
   });
 
   socket.on("loadGroupConversation", (parameters, callback) => {
     loadGroupConversation(parameters)
       .then(({ messages, groupName }) => {
+        const { groupID } = parameters;
+        socket.join(groupID)
+
         callback({ valid: true, messages, groupName });
       })
       .catch((errors) => callback({ errors }));
@@ -25,8 +29,8 @@ module.exports = function (socket) {
     addMessageToGroup(parameters)
       .then((messages) => {
         callback({ valid: true, messages });
-        // send notification to all users
-
+        const { groupID, message } = parameters;
+        io.socket.on(groupID).emit("notifyGroup", { groupID, message });
       })
       .catch((errors) => callback({ errors }));
   });

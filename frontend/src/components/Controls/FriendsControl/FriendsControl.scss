@@ -1,0 +1,70 @@
+ul.friendsList {
+  list-style-type: none;
+  display: flex;
+  justify-content: flex-start;
+  flex-flow: column nowrap;
+
+  li.FriendItem {
+    margin: 0.5rem 0;
+    display: flex;
+    flex-direction: row nowrap;
+    justify-content: space-between;
+
+    a {
+      font-size: 1.5rem;
+      letter-spacing: 0.1rem;
+      text-decoration: none;
+      color: white;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-flow: row nowrap;
+
+      .username {
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+
+      .FriendItem__image {
+        border-radius: 50%;
+        overflow: hidden;
+        height: 5rem;
+        width: 5rem;
+
+        img {
+          height: auto;
+          width: 100%;
+        }
+      }
+
+      .FriendItem__content {
+        .lastMessage {
+          font-size: 1.1rem;
+
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+      }
+
+      .FriendItem__status {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-flow: column nowrap;
+
+        .statusHour {
+          color: #ff5722;
+          font-size: 2rem;
+          margin-bottom: 1rem;
+        }
+
+      }
+    }
+  }
+}
+
+.statusNotify {
+  @include roundedButton();
+  width: 5.6rem;
+  height: 1rem;
+}

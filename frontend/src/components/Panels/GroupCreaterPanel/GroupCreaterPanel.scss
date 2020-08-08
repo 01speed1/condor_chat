@@ -1,0 +1,10 @@
+.GroupCreaterPanel {
+  @include neumorphic();
+  padding: 3rem;
+
+  font-size: 3rem;
+
+  input {
+    margin-bottom: 2rem;
+  }
+}

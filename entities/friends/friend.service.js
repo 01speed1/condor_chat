@@ -1,7 +1,7 @@
 const Friend = require("./friend.model");
 const modelBuilder = require("../../libs/modelsBuilder");
 
-const { create, getOne, findBy, getAll } = modelBuilder(Friend);
+const { create, getOne, findBy } = modelBuilder(Friend);
 
 const User = require("../users/user.model");
 const { getOne: getOneUser } = modelBuilder(User);
@@ -25,9 +25,10 @@ const loadFriendList = async (friendParameters) => {
 
   const friendsResolved = await Promise.all(friendsPromises);
 
-  const friends = friendsResolved.map(({ username, _id: friendID }) => ({
+  const friends = friendsResolved.map(({ username, _id: friendID, imagePath }) => ({
     username,
     friendID,
+    imagePath
   }));
 
   return friends
@@ -36,14 +37,14 @@ const loadFriendList = async (friendParameters) => {
 const addFriend = async ({ currentUserID, newFriend }) => {
   const foundFriend = await findUserByUsername(newFriend);
 
-  if (!foundFriend) return { error: `${newFriend} not found` };
+  if (!foundFriend) return Promise.reject({ error: `${newFriend} not found` });
 
   const isNowMyFried = await isMyFriend({
     currentUserID,
     friendID: foundFriend._id,
   });
 
-  if (isNowMyFried) return { error: `${newFriend} is actually your friend` };
+  if (isNowMyFried) return  Promise.reject({ error: `${newFriend} is actually your friend` });
 
   const {friend} = await create({
     user: currentUserID,

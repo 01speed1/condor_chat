@@ -1,18 +1,10 @@
-@import '../../../styles/index.scss';
-
 .UserControl {
   display: flex;
   align-items: center;
   justify-content: space-around;
 
   &__closeButton {
-    color: white;
-    @include neumorphicButttonSecondary();
-    padding: 0.8rem;
-
-    & > .material-icons{
-      font-size: 2rem;
-    }
+    @include roundedButton();
   }
 
   &__username {
@@ -22,6 +14,7 @@
   &__avatar {
 
     @include neumorphicShadow();
+    @include roundedAvatar();
 
     height: 5rem;
     width: 5rem;

@@ -1,5 +1,3 @@
-import "./GroupCreaterPanel.scss";
-
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 
@@ -21,14 +19,12 @@ function GroupCreaterPanel({ socket, friends, userID }) {
       socket.emit(
         "createGroup",
         { users: [...checkedFriends], name: groupName },
-        ({ errors }) => {
-          errors && console.log("createGroup", errors);
-        }
+        ({ errors }) => console.log("createGroup", errors)
       );
   };
 
   return (
-    <div className="GroupCreaterPanel">
+    <div className="GroupCreaterPanel formField">
       <input
         type="text"
         value={groupName}
@@ -36,6 +32,7 @@ function GroupCreaterPanel({ socket, friends, userID }) {
         onChange={({ target: { value } }) => setGroupName(value)}
       />
       <ul>
+        <h3>Friends to add:</h3>
         {friends.map(({ username, friendID }) => (
           <Checkbox
             key={friendID}

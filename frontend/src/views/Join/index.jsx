@@ -1,11 +1,10 @@
-import "./Join.scss";
-
 import React, { useState, useEffect } from "react";
 
 import { Link, Redirect } from "react-router-dom";
 
 import { BACKEND_URL_API } from "../../constants";
 import requestHelper from "../../helpers/request.helper";
+import InputText from "../../components/Base/InputText.jsx";
 
 export default function Join() {
   const [username, setUsername] = useState("");
@@ -36,24 +35,21 @@ export default function Join() {
       <div className="Join__container">
         <h1 className="Join__title">Welcome to CondorChat!</h1>
 
-        <div className="formField">
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={({ target: { value } }) => setUsername(value)}
-          />
-          <span>{errors?.username && Object.values(errors?.username)}</span>
-        </div>
-        <div className="formField">
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={({ target: { value } }) => setPassword(value)}
-          />
-          <span>{errors?.password && Object.values(errors?.password)}</span>
-        </div>
+        <InputText
+          type="text"
+          placeholder="Type your username"
+          value={username}
+          handleOnChange={setUsername}
+          errors={errors?.username}
+        />
+
+        <InputText
+          type="password"
+          placeholder="Type your password"
+          value={password}
+          handleOnChange={setPassword}
+          errors={errors?.password}
+        />
 
         <div className="Join__buttons">
           <button className="--big" onClick={handleOnLogin} type="button">
@@ -64,6 +60,17 @@ export default function Join() {
             <button type="button">I dont have a accout</button>
           </Link>
         </div>
+      </div>
+
+      <div className="credentials">
+        <a href="">
+          <span>Created by</span>
+          <p>Ocar Guzman - 01speed1</p>
+          <p>{"A Condor lab test, I will take luck ;)"}</p>
+
+          <img src="/git.png" alt="" />
+          <p>Gihub repo</p>
+        </a>
       </div>
     </div>
   );

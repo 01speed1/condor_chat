@@ -17,10 +17,8 @@ router.post(
   upload.single("image"),
   ({file, body: { userID }}, response) => {
 
-    console.log(file)
-
     saveUserImage({file, userID})
-      .then(token => response.status(200).json({ valid: true, token }) )
+      .then(({ imagePath }) => response.status(200).json({ valid: true, imagePath }) )
       .catch(errors => response.status(400).json({ valid: false, errors }))
   }
 );

@@ -1,37 +1,50 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import InputText from "../../Base/InputText";
 
-export default function AddFriendControl({socket, userID, setSelectedFriend}) {
-
+export default function AddFriendControl({
+  socket,
+  userID,
+  setSelectedFriend,
+}) {
   const [newFriend, setNewFriend] = useState("");
+  const [errors, setErrors] = useState("");
 
   const handleOnSearchFriend = (event) => {
     event.preventDefault();
 
-    socket.emit("addFriend", { currentUserID: userID, newFriend }, ({ friendID, errors }) => {
-      errors && console.log("addFriend errors", errors);
-      setSelectedFriend(friendID)
-      setNewFriend("");
-    });
-  };
-
-  const handleOnChangeNewFriend = ({ target: { value } }) => {
-    setNewFriend(value);
+    socket.emit(
+      "addFriend",
+      { currentUserID: userID, newFriend },
+      ({ friendID, errors }) => {
+        setErrors(errors?.error);
+        !errors && setSelectedFriend(friendID);
+        !errors && setNewFriend("");
+      }
+    );
   };
 
   return (
     <div className="addFriendControl">
-      <h2>Add a friend</h2>
-      <input
+      {/* <input
         type="text"
         value={newFriend}
         placeholder="Add friend"
         onChange={handleOnChangeNewFriend}
+      /> */}
+
+      <InputText
+        placeholder="Add friend"
+        type="text"
+        value={newFriend}
+        handleOnChange={setNewFriend}
+        errors={errors}
       />
+
       <Link to="/dashboard/chat">
-        <button type="button" onClick={handleOnSearchFriend}>
-          Add friend
+        <button className="addFriendControl__addButton" onClick={handleOnSearchFriend}>
+          <span className="material-icons">add_circle</span>
         </button>
       </Link>
     </div>
@@ -40,5 +53,5 @@ export default function AddFriendControl({socket, userID, setSelectedFriend}) {
 
 AddFriendControl.propTypes = {
   socket: PropTypes.object,
-  userID: PropTypes.string
+  userID: PropTypes.string,
 };

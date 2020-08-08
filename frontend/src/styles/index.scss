@@ -1,46 +1,26 @@
-@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import './global';
 
-.material-icons {
-  font-family: 'Material Icons';
-  font-weight: normal;
-  font-style: normal;
-  font-size: 24px;  /* Preferred icon size */
-  display: inline-block;
-  line-height: 1;
-  text-transform: none;
-  letter-spacing: normal;
-  word-wrap: normal;
-  white-space: nowrap;
-  direction: ltr;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  -moz-osx-font-smoothing: grayscale;
-  font-feature-settings: 'liga';
-}
+@import './base';
 
-@import './global.scss';
+@import 'mixins';
 
-@import './mixins.scss';
+@import './extras/_material_icons';
+@import './extras/credentials';
 
-*,
-*::after,
-*::before {
-  margin: 0;
-  padding: 0;
-  box-sizing: inherit;
-}
+// COMPONENTS
+@import '../components/Controls/UserControl/UserControl.scss';
+@import '../components/Controls/SearchControl/SearchControl.scss';
+@import '../components/Controls/addFriendControl/AddFriendControl.scss';
+@import '../components/Controls/FriendsControl/FriendsControl.scss';
+@import '../components/Controls/FriendsControl/FriendItem.scss';
+@import '../components/Controls/GroupsControl/GroupsControl.scss';
 
-html {
-  font-size: 62.5%;
-}
+@import '../components/Panels/ChatPanel/ChatPanel.scss';
+@import '../components/Panels/ProfilePanel/ProfilePanel.scss';
+@import '../components/Panels/SearchResultsPanel/SearchResultsPanel.scss';
+@import '../components/Panels/GroupCreaterPanel/GroupCreaterPanel.scss';
 
-body {
-  color: white;
-  background: $color_backgroud;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+// VIEWS
+@import '../views/Join/Join.scss';
+@import '../views/Dashboard/Dashboard.scss';
+

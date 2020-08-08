@@ -1,5 +1,3 @@
-import "./Dashboard.scss";
-
 import React, { useState, useEffect } from "react";
 
 import io from "socket.io-client";
@@ -43,8 +41,6 @@ export default function Dashboard() {
 
     setCurrentUserData(userData);
 
-    initialSocket.on("notifyPrivateMessage", () => alert("new message"));
-
     return () => {
       initialSocket.emit("disconnect", { userID: userData._id });
       initialSocket.off();
@@ -58,14 +54,8 @@ export default function Dashboard() {
         {/* Move to in component */}
         <div className="SideBar">
           <div className="SideBar__userContainer">
-            <UserControl currentUserData={currentUserData} socket={socket} />
+            <UserControl userID={currentUserData._id} socket={socket} />
           </div>
-          <div className="SideBar__photoStatusContainer">
-            <Link to="/dashboard/profile">
-              <button>changePhoto</button>
-            </Link>
-          </div>
-
           <div className="SideBar__searchContainer">
             <SearchControl socket={socket} userID={currentUserData._id} />
           </div>

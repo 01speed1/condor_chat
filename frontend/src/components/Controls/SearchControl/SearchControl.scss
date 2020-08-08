@@ -1,0 +1,17 @@
+.SearchControl {
+  display: flex;
+  justify-content: center;
+
+  &__searchButton {
+    @include roundedButton();
+  }
+
+  input {
+    width: 90%;
+    margin-right: 2rem;
+  }
+
+  .formField {
+    margin: 0;
+  }
+}

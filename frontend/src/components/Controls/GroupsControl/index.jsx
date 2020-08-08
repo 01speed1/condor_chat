@@ -3,6 +3,7 @@ import "./GroupsControl.scss";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import GroupItem from "./GroupItem";
 
 function GroupsControl({
   socket,
@@ -15,28 +16,27 @@ function GroupsControl({
   useEffect(() => {
     socket &&
       socket.emit("loadGroups", { userID }, ({ errors, groups }) => {
-        errors && console.log("loadGroups errors", errors);
         setGroups(groups);
       });
   }, [socket, groups]);
 
-  const handleOnSelecrGroup = (groupID) => () => {
+  const handleOnSelectedGroup = (groupID) => () => {
     setSelectedGroup(groupID);
     setSelectedFriend(null);
   };
 
   return (
     <div className="GroupsControl">
-      <h3 className="GroupsControl__title">Groups</h3>
+      <h2 className="GroupsControl__title">GROUPS</h2>
       <Link to="/dashboard/create_group">
-        <button >Create a Group</button>
+        <button >Create a new Group</button>
       </Link>
 
       <div className="GroupsControl__list">
         {groups?.map(({ groupName, groupID }) => (
-          <Link to="/dashboard/chat" key={groupID} onClick={handleOnSelecrGroup(groupID)}>
-            {groupName}
-          </Link>
+          <div onClick={handleOnSelectedGroup(groupID)}>
+            <GroupItem groupID={groupID} groupName={groupName} socket={socket} />
+          </div>
         ))}
       </div>
     </div>

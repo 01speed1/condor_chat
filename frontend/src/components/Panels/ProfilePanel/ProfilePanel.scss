@@ -1,0 +1,43 @@
+.uploader {
+  @include flexCentered();
+  width: 100%;
+  height: 100%;
+
+  h2 {
+    font-size: 6rem;
+    margin-bottom: 2rem;
+  }
+
+  &__preview {
+    @include roundedAvatar();
+    margin-bottom: 2rem;
+  }
+
+  &__input {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+
+    & + label {
+      font-size: 3rem;
+      padding: 2rem;
+
+      @include neumorphicButttonPrimary();
+
+      font-weight: 700;
+      color: white;
+      background-color: black;
+      display: inline-block;
+
+      margin-bottom: 3rem;
+    }
+
+    &:focus + label,
+    & + label:hover {
+      background-color: #ee4f51;
+    }
+  }
+}

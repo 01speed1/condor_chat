@@ -5,8 +5,7 @@ const { update } = modelBuilder(User);
 const saveUserImage = async ({ userID, file }) => {
   const { imagePath } = await update(userID, { imagePath: file.filename })
 
-  return { imagePath: `/uploads/${imagePath}` }
+  return { imagePath }
 }
-
 
 module.exports = { saveUserImage }

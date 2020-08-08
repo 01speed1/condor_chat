@@ -1,0 +1,17 @@
+.addFriendControl {
+  display: flex;
+  justify-content: center;
+
+  &__addButton {
+    @include roundedButton();
+  }
+
+  input {
+    width: 90%;
+    margin-right: 2rem;
+  }
+
+  .formField {
+    margin: 0;
+  }
+}

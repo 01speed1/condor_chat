@@ -1,8 +1,10 @@
 const OnlineUser = require("./onlineUser.model");
+const User = require("../users/user.model");
 
 const modelBuilder = require("../../libs/modelsBuilder");
 
 const { create, remove, getOne, findBy } = modelBuilder(OnlineUser);
+const { getOne: getUser } = modelBuilder(User);
 
 const connectUser = async (parameters) => {
   const { userID, socketID } = parameters;
@@ -16,17 +18,19 @@ const connectUser = async (parameters) => {
   await Promise.all(oldConnectionsPromises);
   const newConnection = await create({ userID, socketID });
 
-  return { newConnection };
+  const {imagePath, username} = await getUser({ _id: userID })
+
+  return { user: { imagePath, username } };
 };
 
 const isConnectedUser = async ({ userID }) => {
   const connectedUser = await getOne({ userID });
 
-  const { socketID } = connectedUser;
-
   if (!connectedUser) return { error: "user disconnected" };
 
-  return { socketID };
+  const { socketID } = connectedUser;
+
+  return { socketID, userID };
 };
 
 const disconnectUser = async ({ userID }) => {
