@@ -18,6 +18,7 @@ export default function Join() {
       password,
     };
 
+
     requestHelper(`${BACKEND_URL_API}/login`, UserParameters)
       .then(({ valid, token, errors }) => {
         event.preventDefault();
