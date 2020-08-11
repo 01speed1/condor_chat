@@ -18,7 +18,6 @@ export default function Join() {
       password,
     };
 
-    console.log(`${BACKEND_URL_API}/login`)
 
     requestHelper(`${BACKEND_URL_API}/login`, UserParameters)
       .then(({ valid, token, errors }) => {
