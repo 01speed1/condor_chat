@@ -19,6 +19,7 @@ app.use(cors({origin: process.env.FRONTEND_URL}));
 const baseIO = io(server);
 baseIO.origins('*:*');
 
+
 const privateIO = baseIO.of("/private");
 const athorizacion = require('./middlewares/athorizacionSocket')
 
