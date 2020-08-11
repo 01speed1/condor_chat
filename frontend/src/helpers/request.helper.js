@@ -8,8 +8,8 @@ const defaualtAPIConfig = (config) => {
       //cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        //"Access-Control-Allow-Origin": BACKEND_URL,
-        "Access-Control-Allow-Origin": '*',
+        "Access-Control-Allow-Origin": BACKEND_URL,
+        //"Access-Control-Allow-Origin": '*',
         "Access-Control-Allow-Methods": 'POST'
       },
       //redirect: "follow",

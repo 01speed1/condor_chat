@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 app.use(express.static("public"));
 
 const server = http.createServer(app);
-app.use(cors({origin: process.env.FRONTEND_URL}));
+app.use(cors({origin: '*'}));
 
 const baseIO = io(server);
 baseIO.origins('*:*');
@@ -30,6 +30,8 @@ module.exports = { io: baseIO, privateIO };
 require("./sockets");
 require("./routes")(app);
 
-server.listen(process.env.PORT, () =>
+app.get("*", (req, res) => res.send("hola") )
+
+server.listen(process.env.NODE_PORT, () =>
   console.log(`Socket Server running on port ${process.env.NODE_PORT}`)
 );

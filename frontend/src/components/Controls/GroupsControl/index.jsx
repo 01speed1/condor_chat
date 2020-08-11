@@ -33,8 +33,8 @@ function GroupsControl({
       </Link>
 
       <div className="GroupsControl__list">
-        {groups?.map(({ groupName, groupID }) => (
-          <div onClick={handleOnSelectedGroup(groupID)}>
+        {groups?.map(({ groupName, groupID }, index) => (
+          <div key={`group_${index}`} onClick={handleOnSelectedGroup(groupID)}>
             <GroupItem groupID={groupID} groupName={groupName} socket={socket} />
           </div>
         ))}

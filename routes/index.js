@@ -18,9 +18,5 @@ module.exports = (app) => {
   app.use('/api/image_uploader', imageUploaderRouter)
   app.use('/api', ApiRouter)
 
-  // app.get('/', (request, response) => {
-  //   response.sendFile('index.html', { root: path.join(__dirname, 'public') })
-  // })
-
-  // app.get('/*', (request, response) => response.redirect(301, '/') )
+  app.get('/*', (request, response) => response.json("Condor Chat 01speed1") )
 }
